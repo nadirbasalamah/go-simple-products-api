@@ -1,15 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"go-simple-products-api/database"
 	"go-simple-products-api/routes"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
 
-// @title			Simple Products API
-// @version		1.0
-// @description	This is a simple Products API
+const DEFAULT_PORT = "8080"
+
 func main() {
 	database.InitDB()
 
@@ -17,5 +18,13 @@ func main() {
 
 	routes.SetupRoutes(app)
 
-	app.Logger.Fatal(app.Start(":1323"))
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = DEFAULT_PORT
+	}
+
+	appPort := fmt.Sprintf(":%s", port)
+
+	app.Logger.Fatal(app.Start(appPort))
 }
